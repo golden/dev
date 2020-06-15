@@ -13,7 +13,7 @@
    :: <a href="https://github.com/golden/dev/blob/master/CONTACT.md#top">contact</a>
 </p>
 <p align=center>
-   <img width=600 src="https://github.com/timm/misc/blob/master/odd/etc/img/coins.png">
+   <img width=600 src="https://github.com/golden/dev/blob/masteretc/img/coins.png">
 </p>
 <p align=center>
    <img src="https://img.shields.io/badge/language-gawk-orange">
@@ -39,11 +39,11 @@ sudo make install                                │~
 Then run the set ups inside `ape`.
 
 ```
-sh ape
+sh gold
 ```
 
 Then run the test scripts.
 
 ```
-sh ape test/allok.md
+cd test; sh golf tlok.md
 ```

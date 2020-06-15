@@ -13,7 +13,7 @@
    :: <a href="https://github.com/golden/dev/blob/master/CONTACT.md#top">contact</a>
 </p>
 <p align=center>
-   <img width=600 src="https://github.com/golden/dev/blob/master/odd/etc/img/coins.png">
+   <img width=600 src="https://github.com/golden/dev/blob/masteretc/img/coins.png">
 </p>
 <p align=center>
    <img src="https://img.shields.io/badge/language-gawk-orange">
