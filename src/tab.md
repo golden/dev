@@ -113,9 +113,9 @@ function TabCols(i,a,      x,c,xy,what) {
 ```
 ### TabRead() : read a new table from disc
 
-`Tab`les can be initialize from  comma separated value files via
-`tabRead`. If `f` is omitted, then this code reads from standard
-input.
+`Tab`les can be initialize from  comma separated 
+value files via `tabRead`. If `f` is omitted, 
+then this code reads from standard input.
 
 ```awk
 function TabRead(i,f,    c,it) {

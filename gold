@@ -5,16 +5,15 @@ Gold=$(cd $( dirname "${BASH_SOURCE[0]}" ) && pwd )
 
 banner() { cat<<'EOF'
     _....._
-   ';-.--';'               GOLD       : a GAWK object layer
-    }===={       _.---..,   GOLDEN    : a GOLD dev environment
-  .'  _|_ '.    ';-..--';    GOLDMINE : some data mining tools
- /:: (_|_`  \    }====={      GOLDSTAR: some AI fairness tools
-|::  ,_|_)  |  .:   _|_ '.
-\::.   |    /_;:_  (_|_`  \     http://github.com/golden/dev
- '::_    _-;'--.-' ._|_)  |      (c) 2020
-   ``````      \::.  |    /       Tim Menzies
-           jgs  '::_  _-;'         timm@ieee.org
-                  ````` 
+   ';-.--';'    GOLD     : a GAWK object layer
+    }===={      GOLDEN   : a GOLD dev environment
+  .'  _|_ '.    GOLDMINE : some data mining tools
+ /:: (_|_`  \   GOLDSTAR : some AI fairness tools
+|::  ,_|_)  |
+\::.   |    /   http://github.com/golden/dev
+ '::_    _-;'   (c) 2020
+   ``````       Tim Menzies
+jgs             timm@ieee.org
 EOF
 }
 tran() { gawk '
