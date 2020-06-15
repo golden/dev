@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+
+
+Ape=$(cd $( dirname "${BASH_SOURCE[0]}" ) && pwd )
+
+banner() { cat<<'EOF'
+    _....._
+   ';-.--';'               GOLD       : a GAWK object layer
+    }===={       _.---..,   GOLDEN    : a GOLD dev environment
+  .'  _|_ '.    ';-..--';    GOLDMINE : some data mining tools
+ /:: (_|_`  \    }====={      GOLDSTAR: some AI fairness tools
+|::  ,_|_)  |  .:   _|_ '.
+\::.   |    /_;:_  (_|_`  \     http://github.com/golden/code
+ '::_    _-;'--.-' ._|_)  |      (c) 2020
+   ``````      \::.  |    /       Tim Menzies
+           jgs  '::_  _-;'         timm@ieee.org
+                  ````` 
+EOF
+}
+tran() { gawk '
+  function transpile(s) {
+    s = gensub(/\.([^0-9\\*\\$\\+])([a-zA-Z0-9_]*)/, 
+              "[\"\\1\\2\"]","g",s) 
+    for(i in Pat) gsub(i,Pat[i],s)
+    return s
+  }
+  BEGIN                  { In=1 }
+  !In && /^#define[ \t]/ { Pat[$2]= $3   }
+  /```awk/               { In=0; print "# " $0; next }
+  /```($|[^a])/          { In=1; print "# " $0; next }
+  ! In                   { $0 = transpile($0) }
+                         { print (In ? "# " : "")  $0 } '
+}
+trans() {
+  local f=`ls $Gold/src/*.md $Gold/test/*.md 2>/dev/null`
+  if [ -n "$f" ]; then 
+    for g in $f 
+    do 
+      local h=$Gold/.var/$(basename $g .md).awk
+      if [ "$g" -nt "$h" ]; then
+        cat $g | tran > $h
+      fi
+    done
+   fi
+}
+doc() {
+  cat $Gold/README.md | gawk '
+        BEGIN { FS="\n"; RS="" } 
+              { print; exit 0  }'  
+  cat $1 | gawk '
+        BEGIN { FS="\n"; RS="" } 
+        NR==1 && $1~/name=top>/ { next }
+              { print ""; print }'  
+}
+docs() {
+  local f=`ls $Gold/src/*.md $Gold/test/*.md $Gold/*.md 2>/dev/null`
+  if [ -n "$f" ]; then 
+    for g in $f
+    do
+       if [ "$Gold/README.md" -nt "$g" ]; then
+         local h=$(mktemp)
+         doc $g > $h
+         mv $h $g
+       fi
+    done
+  fi
+}
+
+here() { cd $1; basename `pwd`; }
+
+exists() { 
+  if [ ! -f "$Gold/$1"  ]; then
+    if  [ -f "$Gold/$2" ]; then
+      cp $Gold/$2 $Gold/$1
+    fi
+  fi
+}
+ok() {
+  (cd $Gold/test; sh ../ape ${1}ok.md)
+}
+##################################################
+
+setup() {
+  mkdir -p $Gold/.var
+  mkdir -p $Gold/etc/dot
+  mkdir -p $Gold/src
+  mkdir -p $Gold/test
+  
+  exists .gitignore         etc/dot/gitignore
+  exists .travis.yml        etc/dot/travisyml
+  exists CODE_OF_CONDUCT.md etc/md/CODE_OF_CONDUCT.md 
+  exists CITATION.md        etc/md/CITATION.md 
+  exists CONTACT.md         etc/md/CONTACT.md 
+  exists CONTRIBUTE.md      etc/md/CONTRIBUTE.md 
+  exists INSTALL.md         etc/md/INSTALL.md 
+  exists LICENSE.md         etc/md/LICENSE.md 
+  exists requirements.txt   etc/md/requirements.txt
+  exists src/ape.md         etc/md/ape.md
+  exists src/lib.md         etc/md/lib.md
+  exists src/obj.md         etc/md/obj.md
+  exists src/my.md          etc/md/my.md
+  
+ docs
+ trans
+}
+setup
+
+k=$Gold/.var/$(basename $1 .md).awk
+if [ -f "$k" ]; then
+  if [ -t 0 ]; then
+    AWKPATH="$Gold/.var:$AWKPATH"  gawk  -f $k
+  else
+    cat - | AWKPATH="$Gold/.var:$AWKPATH"  gawk $j -f $k
+  fi 
+else
+  _c0="\033[00m"     # white
+  _c1="\033[01;32m"  # green
+  _c2="\033[01;34m"  # blue
+  _c3="\033[31m"     # red
+  _c5="\033[35m"     # purple
+  _c6="\033[33m"     # yellow
+  _c7="\033[36m"     # turquoise 
+  _c8="\033[96m"     # magenta
+  bash -c "echo  -ne '\033[96m'"
+  banner
+  bash -c "echo  -ne '\033[00m'"
+  PROMPT_COMMAND='echo -ne "!!$(git branch 2>/dev/null | grep '^*' | colrm 1 2) ";PS1="$(here ..)/$(here .) \!>\e[m "'
+  alias l='ls -G'
+  alias ..='cd ..'
+  alias gg="git pull"
+  alias gs="git status"
+  alias gp="git commit -am 'saving'; git push; git status"
+  alias vi="vim -u $Gold/etc/dot/vimrc "
+  alias tmux="tmux -f $Gold/etc/dot/tmuxrc "
+  for c in gawk git tmux vim ; do
+    if [ -z "$(which $c)" ]; then
+      echo "#WARNING:  missing: $c (better install it)"
+    fi
+  done
+  vim -E -s -u "$Gold/etc/dot/vimrc" +PluginInstall +qall
+fi
+
