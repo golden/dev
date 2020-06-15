@@ -1,6 +1,6 @@
 <a name=top>
 <h1 align=center>
-   <a href="https://github.com/timm/shape/blob/master/README.md#top">
+   <a href="https://github.com/golden/dev/blob/master/README.md#top">
      GOLD = a Gawk object layer
    </a>
 </h1>
@@ -121,13 +121,13 @@ Some nested array `a` by some field `k`.
 
 ```awk
 function keysort(a,k) {
-  APE.keysort = k
+  GOLD.keysort = k
   return asort(a,a,"keysorter")
 }
 
 function keysorter(i1,x,i2,y) {
-  return compare(x[ APE.keysort ] + 0,
-                 y[ APE.keysort ] + 0)
+  return compare(x[ GOLD.keysort ] + 0,
+                 y[ GOLD.keysort ] + 0)
 } 
 
 function compare(x,y) {
@@ -166,9 +166,9 @@ Increments the global `test.yes` and `test.no` counters.
 function ok(f,yes,    msg) {
   msg = yes ? "PASSED!" : "FAILED!"
   if (yes) 
-     APE.test.yes++ 
+     GOLD.test.yes++ 
   else
-     APE.test.no++;
+     GOLD.test.no++;
   print "#test:\t" msg "\t" f
 }
 ```

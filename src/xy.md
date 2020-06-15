@@ -1,6 +1,6 @@
 <a name=top>
 <h1 align=center>
-   <a href="https://github.com/timm/shape/blob/master/README.md#top">
+   <a href="https://github.com/golden/dev/blob/master/README.md#top">
      GOLD = a Gawk object layer
    </a>
 </h1>
@@ -24,7 +24,7 @@
 </p>
 
 ```awk
-@include "ape"
+@include "gold"
 @include "sym"
 
 function Xy(i) {

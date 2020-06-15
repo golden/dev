@@ -1,6 +1,6 @@
 <a name=top>
 <h1 align=center>
-   <a href="https://github.com/timm/shape/blob/master/README.md#top">
+   <a href="https://github.com/golden/dev/blob/master/README.md#top">
      GOLD = a Gawk object layer
    </a>
 </h1>
@@ -24,14 +24,14 @@
 </p>
 
 ```awk
-@include "ape"
+@include "gold"
 @include "tab"
 
 BEGIN {tests("tabok","_tab,_rows")} 
 
 function _tab(f,    i) {
   Tab(i)
-  TabRead(i,"data/raw/auto93" APE.dot "csv") 
+  TabRead(i,"data/raw/auto93" GOLD.dot "csv") 
   ok(f,length(i.rows)==398)
   ok(f,"number" == typeof(i.rows[1][2]))
   ok(f ":3", i.cols[1].seen[3] == 4)
@@ -40,7 +40,7 @@ function _tab(f,    i) {
 
 function _rows(f,    m,n,i,j,k,some,r1,r2,a,dom) {
   Tab(i)
-  TabRead(i,"data/raw/auto93" APE.dot "csv") 
+  TabRead(i,"data/raw/auto93" GOLD.dot "csv") 
   m = 256
   while(m-- > 0)
      some[ anys(i.rows) ]

@@ -1,6 +1,6 @@
 <a name=top>
 <h1 align=center>
-   <a href="https://github.com/timm/shape/blob/master/README.md#top">
+   <a href="https://github.com/golden/dev/blob/master/README.md#top">
      GOLD = a Gawk object layer
    </a>
 </h1>
@@ -26,13 +26,13 @@
 # Objects
 
 ```awk
-BEGIN{  APE["oid"]  = 0
-        APE["ok"]["yes"] = APRE["ok"]["no"] = 0
-        APE["dot"] = sprintf("%c",46)
-        APE["up"]   = APE["dot"] APE["dot"]
+BEGIN{  GOLD["oid"]  = 0
+        GOLD["ok"]["yes"] = GOLD["ok"]["no"] = 0
+        GOLD["dot"] = sprintf("%c",46)
+        GOLD["up"]   = GOLD["dot"] GOLD["dot"]
 }
 function List(i)    { split("",i,"") }
-function Object(i)  { List(i); i["ois"] = "Object"; i["oid"] = ++APE["oid"] }
+function Object(i)  { List(i); i["ois"] = "Object"; i["oid"] = ++GOLD["oid"] }
 
 function zap(i,k)  { k = k?k:length(i)+1; i[k][0]; List(i[k]); return k } 
 
@@ -44,13 +44,13 @@ function inherit(k,f,   g) {
   while(k) {
     g = k f
     if (g in FUNCTAB) return g
-    k = APE["ois"][k]
+    k = GOLD["ois"][k]
   }
   print "#E> failed method lookup: ["f"]"
   exit 2
 }
 function is(i,x) {
-  if ("ois" in i) { APE["ois"][x] = i["ois"] }
+  if ("ois" in i) { GOLD["ois"][x] = i["ois"] }
   i["ois"] = x
 }
 ```

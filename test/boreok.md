@@ -1,6 +1,6 @@
 <a name=top>
 <h1 align=center>
-   <a href="https://github.com/timm/shape/blob/master/README.md#top">
+   <a href="https://github.com/golden/dev/blob/master/README.md#top">
      GOLD = a Gawk object layer
    </a>
 </h1>
@@ -29,6 +29,6 @@
 BEGIN {tests("boreok","_bore") }
 
 function _bore(f,    i) {
-  Bore(i, "data/cooked/auto93bore" APE.dot "csv") 
+  Bore(i, "data/cooked/auto93bore" GOLD.dot "csv") 
 }
 ```

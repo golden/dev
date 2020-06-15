@@ -1,6 +1,6 @@
 <a name=top>
 <h1 align=center>
-   <a href="https://github.com/timm/shape/blob/master/README.md#top">
+   <a href="https://github.com/golden/dev/blob/master/README.md#top">
      GOLD = a Gawk object layer
    </a>
 </h1>
@@ -30,7 +30,7 @@ BEGIN {tests("tabok","_tabs") }
 
 function _tabs(f,    i,k) {
   Tabs(i)
-  TabsRead(i,"data/cooked/auto93bore" APE.dot "csv") 
+  TabsRead(i,"data/cooked/auto93bore" GOLD.dot "csv") 
   print "all " score(i.all)
   for(k in i.tab) {
      print k " " score(i.tab[k])  }

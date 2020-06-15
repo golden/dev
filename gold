@@ -76,7 +76,7 @@ exists() {
   fi
 }
 ok() {
-  (cd $Gold/test; sh ../ape ${1}ok.md)
+  (cd $Gold/test; sh ../gold ${1}ok.md)
 }
 ##################################################
 
@@ -95,7 +95,7 @@ setup() {
   exists INSTALL.md         etc/md/INSTALL.md 
   exists LICENSE.md         etc/md/LICENSE.md 
   exists requirements.txt   etc/md/requirements.txt
-  exists src/ape.md         etc/md/ape.md
+  exists src/gold.md         etc/md/gold.md
   exists src/lib.md         etc/md/lib.md
   exists src/obj.md         etc/md/obj.md
   exists src/my.md          etc/md/my.md

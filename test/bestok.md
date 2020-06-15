@@ -1,6 +1,6 @@
 <a name=top>
 <h1 align=center>
-   <a href="https://github.com/timm/shape/blob/master/README.md#top">
+   <a href="https://github.com/golden/dev/blob/master/README.md#top">
      GOLD = a Gawk object layer
    </a>
 </h1>
@@ -30,7 +30,7 @@ BEGIN {tests("bestok","_best")}
 
 function _best(f,    i,j,r,t) {
   Tab(t)
-  TabRead(t,"data/raw/auto93" APE.dot "csv") 
+  TabRead(t,"data/raw/auto93" GOLD.dot "csv") 
   Best(i, t, "y")
   print o(t.header), ", !best"
   for(j in i.rest) print  o(t.rows[j]) ", false" 

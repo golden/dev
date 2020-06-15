@@ -1,6 +1,6 @@
 <a name=top>
 <h1 align=center>
-   <a href="https://github.com/timm/shape/blob/master/README.md#top">
+   <a href="https://github.com/golden/dev/blob/master/README.md#top">
      GOLD = a Gawk object layer
    </a>
 </h1>
@@ -24,7 +24,7 @@
 </p>
 
 ```awk
-@include "ape"
+@include "gold"
 
 BEGIN {  tests("libok","_list,_copy,_csv,_anys") }
 
@@ -49,7 +49,7 @@ function _copy(f,    a,b) {
 }
 
 function _csv(f, it,n) {
-  Row(it,"data/raw/weather" APE.dot "csv") 
+  Row(it,"data/raw/weather" GOLD.dot "csv") 
   while( Rows(it) )
     n += length(it.cells) 
   ok(f, n == 60)
