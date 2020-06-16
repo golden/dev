@@ -1,7 +1,7 @@
 <a name=top>
 <h1 align=center>
    <a href="https://github.com/golden/dev/blob/master/README.md#top">
-     GOLD = a Gawk object layer
+     GOLD = the Gawk Object Layer
    </a>
 </h1>
 <p align=center>

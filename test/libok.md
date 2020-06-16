@@ -1,7 +1,7 @@
 <a name=top>
 <h1 align=center>
    <a href="https://github.com/golden/dev/blob/master/README.md#top">
-     GOLD = a Gawk object layer
+     GOLD = the Gawk Object Layer
    </a>
 </h1>
 <p align=center>
@@ -26,7 +26,7 @@
 ```awk
 @include "gold"
 
-BEGIN {  tests("libok","_list,_copy,_csv,_anys") }
+BEGIN {  tests("libok","_list,_copy,_anys") }
 
 function _list(f,    a) {
   copy(MY,a)
@@ -48,14 +48,6 @@ function _copy(f,    a,b) {
   ok(f, b.here.now.one == "here_now_one")
 }
 
-function _csv(f, it,n) {
-  Row(it,"data/raw/weather" GOLD.dot "csv") 
-  while( Rows(it) )
-    n += length(it.cells) 
-  ok(f, n == 60)
-  ok(f, typeof(it.cells[1])=="string")
-  ok(f, typeof(it.cells[2])=="strnum")
-}
 function _anys(f,   n,s,r,good,x) {
   n = 10
   while(n--) s[n+1]

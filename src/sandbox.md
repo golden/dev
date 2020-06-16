@@ -24,10 +24,10 @@
 </p>
 
 ```awk
-@include "lib"
+@include "gold"
 
 BEGIN {
-  main1( "1,a,1,a,1,b,1,a,1,a,1,b,1,a,1,a,1,a,1,a,1,a,2,a,2,a,"\
+  main( "1,a,1,a,1,b,1,a,1,a,1,b,1,a,1,a,1,a,1,a,1,a,2,a,2,a,"\
          "2,b,2,b,2,b,2,b,2,a,2,a,3,b,3,b,3,b,3,b,3,b,3,a,3,a,"\
          "3,a,3,b,4,a,4,a,4,a,4,a,4,b,4,a,4,a,4,b,5,b,5,b,5,b,"\
          "5,b,5,b,5,b,5,b")
@@ -35,25 +35,56 @@ BEGIN {
 
 function main(s) {
   s = s "," s "," s "," s "," s
-  main( s ) 
+  worker( s ) 
   rogues()
 }
 
-function main(s,   n,j,xy,a,k,n16) {
+function worker(s,   n,j,xy,a,k,rs) {
   n = split(s,a,",")
-  for(j=1;j<n;j+=2) {
-    xy[++k].x = a[j]
-    xy[  k].y = a[j+1]
+  for(j=1;j<n;j+=2) 
+   if ( a[j] != "x" ) {
+      xy[++k].x = a[j]+ rand()
+      xy[  k].y = a[j+1]
   }
-  keysort(xy,"x")
-  oo(xy)
-  n16 = int(n/16)
-  div(xy)
+  ranges(xy, "b", rs)
+  oo(rs)
 }
-function div(a) {
-  for (j=16; j<=2; i /=2) {
-    min = length(a)/j
-    if (min > 4) break
+function Range(i, want, min) {
+  i.lo =  10^64
+  i.hi = -10^64
+  i.n  = 0
+  i.want = want
+  has(i,"here")
+  i.min = min
+}
+function RangeFill(i,x,y) {
+  x += 0
+  if (x < i.lo) i.lo = x
+  if (x > i.hi) i.hi = x
+  i.here[ y==i.want ]++
+  return ++i.n >= i.min
+}
+function ranges(a,ok,b,  min,j,r) {
+  for (j=16; j>=2; j /=2) 
+    if ((min = int(length(a)/j)) >= 4) 
+      break 
+  if (min<4) min = 4
+  hasss(b, (r=1) ,"Range", ok,min)
+  keysort(a,"x")
+  for(j=1; j <= length(a); j++)  
+    if ( RangeFill( b[r], a[j].x, a[j].y) )
+      if (j < length(a) - min)
+        if(a[j].x != a[j+1].x) 
+          hasss( b, (r=r+1), "Range", ok, min)
+}
+function score(ranges,j,k,     n,b,r) {
+  for(i=j;i<=j;i++) {
+    n += ranges[i].n
+    b += ranges[i].here[1]
+    r += ranges[i].here[0]
   }
+  b = b /n
+  r = r /n
+  return b*b / (b+r) 
 }
 ```

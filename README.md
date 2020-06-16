@@ -1,7 +1,7 @@
 <a name=top>
 <h1 align=center>
    <a href="https://github.com/golden/dev/blob/master/README.md#top">
-     GOLD = a Gawk object layer
+     GOLD = the Gawk Object Layer
    </a>
 </h1>
 <p align=center>
@@ -23,17 +23,18 @@
    <a href="https://doi.org/10.5281/zenodo.3887420"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3887420.svg" alt="DOI"></a>
 </p>
 
-## How
 
-To get started, see our [install](INSTALL.md) instructions and our
-[guide for contributors](CONTRIBUTING.md).
+(To get started with this system, see our [install](INSTALL.md) instructions and our
+[guide for contributors](CONTRIBUTING.md).)
 
 
 ## What
 
-- GAWK is very portable, very succinct, scripting language. 
-  - It lacks encapsulation and packaging tools, an IDE, unit testing standards, or document generation tools. 
-  - Which is all easily fixed with a few scripts written in, you guessed it, GAWK.
+- GAWK = GNU Awk (and "awk" is short for its creators: Alfred Aho, Peter Weinberger, and Brian Kernighan).
+  - GAWK is a very portable and succinct scripting language. 
+  - GAWK has some shortcomings: e.g. weak encapsulation and packaging support, no IDE or unit testing framework,
+    and not document generation tools. 
+  - But that is all easily fixed with a few small scripts (written in, you guessed it, GAWK).
 - GOLD is an object layer that extends GAWK with objects, aggregation, polymorphism and inheritance. 
 - GOLDMINE are some data mining tools written in GOLD.
 - GOLDSTAR are a set of data mining fairness assurance operators. 
@@ -42,8 +43,7 @@ To get started, see our [install](INSTALL.md) instructions and our
 
 <p align=center><a href="etc/img/screen.png"><img src="etc/img/screen900.png" width=900></a></p>
 
-To support easy documentation
-
+To support easy documentation:
 - GOLD code is stored in `x.md`  Markdown files (so can mix code and doc) 
 - There are also scripts to 
   - Add a table of contents to your Markdown, if you want them.
@@ -56,7 +56,7 @@ To support easier access to nested array contents:
 
 To implement that dot notation, the GOLD interpreter (celled `gold`):
 
-- Transpiles code  from `src/\*.md`  to  `.var/x.awk`. That transpiler is a one line long:
+- Transpiles code  from `src/\*.md`  to  `.var/x.awk`. That transpiler is just line long:
 
 
 ```awk
