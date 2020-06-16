@@ -25,6 +25,8 @@
 
 # Num
 
+## Num() : creation
+
 ```awk
 function Num(i,txt,pos) {
   Object(i)
@@ -38,12 +40,14 @@ function Num(i,txt,pos) {
 }
 ```
 
-Updates
+## Updates
+
+### NuumAdd() : add new item
 
 ```awk
 function NumAdd(i,x,    d) {
   if (x=="?") return x
-  x += 0 # coerce to string
+  x = x+0 # ensure we have a number
   i.n++
   i.lo  = x < i.lo ? x : i.lo
   i.hi  = x > i.hi ? x : i.hi
@@ -53,6 +57,23 @@ function NumAdd(i,x,    d) {
   NumSd(i)
   return x
 }
+```
+### NumSd(): update standard deviation
+
+Called as a side-effect of `NumAdd` and `NumDec`.
+
+```awk
+function NumSd(i) {
+  if (i.m2 < 0) return 0
+  if (i.n  < 2) return 0
+  i.sd = (i.m2/(i.n - 1))^0.5
+  return i.sd
+}
+```
+
+### NuumDec() : remove item
+
+```awk
 function NumDec(i,x,     d) {
   if (x == "?") return x
   if (i.n < 1 ) return x
@@ -63,16 +84,31 @@ function NumDec(i,x,     d) {
   i.sd  = NumVar(i)
   return x
 }
-function NumSd(i) {
-  if (i.m2 < 0) return 0
-  if (i.n  < 2) return 0
-  i.sd = (i.m2/(i.n - 1))^0.5
-  return i.sd
-}
+```
+## Reports
 
+###  NumMid(),  NumVar()
+
+```awk
 function NumMid(i) { return i.mu }
 function NumVar(i) { return i.sd }
 ```
+###  NumNorm(); normalize a number 0..1 min..max
+
+```awk
+function NumNorm(i,x) {
+  if (x ~ /\?/) return x
+  return (x - i.lo)/(i.hi - i.lo + 10^-32)
+}
+```
+###  NumScore(); report name and mid
+
+```awk
+function NumScore(i) {
+  return i.txt "=" NumMid(i)
+}
+```
+### NumDist(): distance between 2 numbers
 
 ```awk
 function NumDist(i,x,y) {
@@ -83,28 +119,5 @@ function NumDist(i,x,y) {
   y = NumNorm(i,y)
   return abs(x - y) 
 }
-
-function NumNorm(i,x) {
-  if (x ~ /\?/) return x
-  return (x - i.lo)/(i.hi - i.lo + 10^-32)
-}
-
-function NumScore(i) {
-  return i.txt "=" NumMid(i)
-}
 ```
-Discretization (cut two Gaussians, four ways).
 
-```awk
-function Num4Cuts(i,j,x,    a,b,c,d) {
-  a = 1/(2*i.sd^2)      - 1/(2*j.sd^2)
-  b = j.mu/(j.sd^2)     - i.mu/(i.sd^2)
-  c = i.mu^2/(2*i.sd^2) - j.mu^2/(2*j.sd^2) - log(j.sd/i.sd)
-  d = b^2 - 4 * a * c
-  x[1]= (-b - sqrt(d))/(2*a)
-  x[2]= i.mu
-  x[3]= (-b + sqrt(d))/(2*a)
-  x[4]= j.mu
-  asort(x)
-}
-```

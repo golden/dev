@@ -92,6 +92,7 @@ Iterator.
 Read a csv file `f`, 
 
 - Set `i.cells` to all columns that _do not_ start with `?`.
+- Coerce all number strings to numners
 - Set `i.r` to the current row number (and first row as `i.r=0`)
 
 ```awk
@@ -103,7 +104,7 @@ function Row(i,file) {
   has(i,"cells")
   i.r = -1
 }
-function RowDoing(i,   c,tmp,n) {
+function RowDoing(i,   c,tmp,n,x,y) {
   if (!csv(tmp,i.file)) 
     return 0
   if (!length(i.cells)) 
@@ -111,8 +112,11 @@ function RowDoing(i,   c,tmp,n) {
       if (tmp[c] !~ /\?/)
         i.use[c] = ++n;
   i.r++
-  for(c in i.use)  
-    i.cells[ i.use[c] ] = tmp[c] 
+  for(c in i.use)  {
+    x = tmp[c]
+    y = x+0
+    i.cells[ i.use[c] ] = x==y ? y : x
+  }
   return 1
 }
 ```

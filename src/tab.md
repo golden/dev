@@ -45,6 +45,7 @@
 @include "num"  # knows "mu", standard deviations "sd"
 @include "sym"  # knows "mode" and counts of "seen" symbols
 @include "poly" # polymorphic functions
+@include "it"   # iterators
 ```
 ## Create
 ### Tab()
@@ -120,7 +121,7 @@ then this code reads from standard input.
 ```awk
 function TabRead(i,f,    c,it) {
   Row(it,f)
-  while (Rows(it)) {
+  while (doing(it)) {
     if (it.r == 0) 
       TabCols(i,it.cells)
     else 

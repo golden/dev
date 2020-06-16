@@ -26,6 +26,7 @@
 ```awk
 @include "gold"
 @include "tab"
+@include "it"
 
 BEGIN {tests("tabok","_tab,_rows")} 
 
