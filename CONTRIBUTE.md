@@ -243,7 +243,9 @@ While the prerequisites above must be satisfied prior to having your pull reques
 
 ### Gawk Styleguide
 
+* For start-up actions at load time, use `BEGIN {ACTION}`.
 * Assume you code will be added as an `@include` to someone else's code. This means:
+  * Minimize (avoid) using globals
   * Use `BEGIN {ACTION}` a lot (when wanting to call code when loading a file);
   * Use the following two constructs rarely (if at all) 
     since that means this file cannot be a subroutine loaded somewhere else;
@@ -253,6 +255,8 @@ While the prerequisites above must be satisfied prior to having your pull reques
   * Code should be no more than 60 lines wide.
 
 ### Gold Styleguide
+
+no shbangs
 
 sets:  dont do intp[[x] = x ~/[0-9]+/ but rather    
 if(x~/[0-9]+/) intp[x]

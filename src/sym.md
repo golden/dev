@@ -25,14 +25,11 @@
 
 # sym
 
-## Create
+## Sym(): constructor
 
 ```awk
-#include "gold"
-```
-### Sym()
+@include "gold"
 
-```awk
 function Sym(i,txt,pos) { 
   Object(i)
   is(i, "Sym")

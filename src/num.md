@@ -40,7 +40,7 @@
 @include "gold"
 ```
 
-## Num() : creation
+## Num() : constructor
 
 ```awk
 function Num(i,txt,pos) {

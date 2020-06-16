@@ -39,52 +39,87 @@ function main(s) {
   rogues()
 }
 
-function worker(s,   n,j,xy,a,k,rs) {
+function worker(s,   n,j,xy,a,k,rs,x) {
   n = split(s,a,",")
   for(j=1;j<n;j+=2) 
    if ( a[j] != "x" ) {
-      xy[++k].x = a[j]+ rand()
+      x= a[j] + rand()
+      xy[++k].x = x
       xy[  k].y = a[j+1]
+      print(x,a[j+1])
   }
-  ranges(xy, "b", rs)
+  Ranges(xy, "b", rs)
   oo(rs)
 }
-function Range(i, want, min) {
-  i.lo =  10^64
-  i.hi = -10^64
-  i.n  = 0
+function Range(i, want, min,last) {
+  i.lo   =  10^64
+  i.hi   = -10^64
+  i.last = last
   i.want = want
-  has(i,"here")
-  i.min = min
+  i.best = 0
+  i.rest = 0.00001
+  i.n    = 0.00001
+  i.min  = min
+}
+function RangeMayMerge(i,j, 
+                       bi,bj,b,ri,rj,r, si,sj,s) {
+  #-- bests
+  bi =  i.best; bj  = j.best; b  = bi+bj; 
+  bi /= i.n;    bj /= j.n;    b /= (i.n+j.n)
+  #-- rests
+  ri =  i.rest; rj  = j.rest; r  = ri+rj; 
+  ri /= i.n;    rj /= j.n;    r /= (i.n+j.n)
+  #-- scores
+  si = bi^2   / (bi + ri)
+  sj = bj^2  /  (bj + rj)
+  s  = b ^2 /   (b  + r)
+  return (s >= si*1.05 || s >= sj*1.05) 
+}
+function RangeMerge(i,j) {
+  i.hi    = j.hi
+  i.best += j.best
+  i.rest += j.rest
+  i.n    += j.n
 }
 function RangeFill(i,x,y) {
   x += 0
   if (x < i.lo) i.lo = x
   if (x > i.hi) i.hi = x
-  i.here[ y==i.want ]++
+  i.best += y==i.want
+  i.rest += y!=i.want
   return ++i.n >= i.min
 }
-function ranges(a,ok,b,  min,j,r) {
+function Ranges(a,ok,b,  min,j,r) {
   for (j=16; j>=2; j /=2) 
     if ((min = int(length(a)/j)) >= 4) 
       break 
   if (min<4) min = 4
-  hasss(b, (r=1) ,"Range", ok,min)
+  has3(b, ++r ,"Range", ok,min)
   keysort(a,"x")
   for(j=1; j <= length(a); j++)  
     if ( RangeFill( b[r], a[j].x, a[j].y) )
       if (j < length(a) - min)
         if(a[j].x != a[j+1].x) 
-          hasss( b, (r=r+1), "Range", ok, min)
+          has3( b, ++r, "Range", ok, min,r-1);
+  while (RangesMerged(b));
 }
-function score(ranges,j,k,     n,b,r) {
-  for(i=j;i<=j;i++) {
-    n += ranges[i].n
-    b += ranges[i].here[1]
-    r += ranges[i].here[0]
-  }
-  b = b /n
-  r = r /n
-  return b*b / (b+r) 
+
+function RangesMerged(a,   b4) {
+  b4 = length(a)
+  RangesMerge(a, length(a), 0)
+  return b4 > length(a)
+}
+
+function RangesMerge(a,y,z,    x) {
+  if (y<2) return
+  x = a[y].last
+  if (x && RangeMayMerge( a[x], a[y] )) {
+     RangeMerge( a[x], a[y] )
+     if(z) a[z].last = x
+     print(y)
+     delete a[y];
+     RangesMerge(a,x,z)  
+  } else
+     RangesMerge(a,x,y) 
 }
 ```

@@ -36,9 +36,11 @@ function Object(i)  { List(i); i["ois"] = "Object"; i["oid"] = ++GOLD["oid"] }
 
 function zap(i,k)  { k = k?k:length(i)+1; i[k][0]; List(i[k]); return k } 
 
-function has( i,k,f,      s) { f=f?f:"List"; s=zap(i,k); @f(i[k]);     return s}
-function hass(i,k,f,m,    s) {               s=zap(i,k); @f(i[k],m);   return s}
-function hasss(i,k,f,m,n, s) {               s=zap(i,k); @f(i[k],m,n); return s}
+function has( i,k,f,      s) { f=f?f:"List"; 
+                               s = zap(i,k); @f(i[k]);       return s}
+function hass(i,k,f,m,    s) { s = zap(i,k); @f(i[k],m);     return s}
+function has2(i,k,f,m,n,  s) { s = zap(i,k); @f(i[k],m,n);   return s}
+function has3(i,k,f,m,n,o,s) { s = zap(i,k); @f(i[k],m,n,o); return s}
 
 function inherit(k,f,   g) {
   while(k) {

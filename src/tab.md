@@ -109,7 +109,7 @@ function TabCols(i,a,      x,c,xy,what) {
     what == "Num" ? i.the.nums[c] : i.the.syms[c]
     # -------------------------------------------
     # make the new column (of type "what")
-    hass(i.cols,c,what,x,c)
+    has2(i.cols,c,what,x,c)
 }}
 ```
 ### TabRead() : read a new table from disc
