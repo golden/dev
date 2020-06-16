@@ -98,7 +98,7 @@ Print keys in sorted order.
 
 ```awk
 function oo(a,prefix,    indent,   i,txt) {
-  txt = indent ? indent : (prefix AU["dot"] )
+  txt = indent ? indent : (prefix GOLD["dot"] )
   if (!isarray(a)) {print(a); return a}
   ooSortOrder(a)
   for(i in a)  {
@@ -299,7 +299,7 @@ function Row(i,file) {
   has(i,"cells")
   i.r = -1
 }
-function Rows(i,   c,tmp,n) {
+function RowDoing(i,   c,tmp,n) {
   if (!csv(tmp,i.file)) 
     return 0
   if (!length(i.cells)) 
@@ -315,7 +315,7 @@ function Rows(i,   c,tmp,n) {
 Note: `i` needs to be initialized before
 each call to `Rows` e.g.
 
-     Row(i, "data" AU.dot "csv")
-     while( Rows(i) ) {
-       print i.cells[1]
+     Row(it, "data" GOLD.dot "csv")
+     while( Doing(it) ) {
+       print it.cells[1]
      
