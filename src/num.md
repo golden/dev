@@ -25,6 +25,21 @@
 
 # Num
 
+- [Num()](#num--creation) : creation
+- [Updates](#updates) 
+    - [NuumAdd()](#nuumadd--add-new-item) : add new item
+    - [NumSd()](#numsd-update-standard-deviation) : update standard deviation
+    - [NuumDec()](#nuumdec--remove-item) : remove item
+- [Reports](#reports) 
+    - [NumMid(),  NumVar()](#nummid--numvar) 
+    - [NumNorm(); normalize a number 0..1 min..max](#numnorm-normalize-a-number-01-minmax) 
+    - [NumScore(); report name and mid](#numscore-report-name-and-mid) 
+    - [NumDist()](#numdist-distance-between-2-numbers) : distance between 2 numbers
+
+```awk
+@include "gold"
+```
+
 ## Num() : creation
 
 ```awk
