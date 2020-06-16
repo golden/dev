@@ -30,11 +30,13 @@
 
 ## What
 
-- GAWK = GNU Awk (and "awk" is short for its creators: Alfred Aho, Peter Weinberger, and Brian Kernighan).
-  - GAWK is a very portable and succinct scripting language. 
-  - GAWK has some shortcomings: e.g. weak encapsulation and packaging support, no IDE or unit testing framework,
+GAWK is  GNU Awk (and "awk" is short for its creators: Alfred Aho, Peter Weinberger, and Brian Kernighan).
+GAWK is a very portable and succinct scripting language. 
+
+GAWK has some shortcomings: e.g. weak encapsulation and packaging support, no IDE or unit testing framework,
     and not document generation tools. 
-  - But that is all easily fixed with a few small scripts (written in, you guessed it, GAWK).
+But that is all easily fixed with a few small scripts (written in, you guessed it, GAWK):
+
 - GOLD is an object layer that extends GAWK with objects, aggregation, polymorphism and inheritance. 
 - GOLDMINE are some data mining tools written in GOLD.
 - GOLDSTAR are a set of data mining fairness assurance operators. 
