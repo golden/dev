@@ -32,9 +32,9 @@
     - [NuumDec()](#nuumdec--remove-item) : remove item
 - [Reports](#reports) 
     - [NumMid(),  NumVar()](#nummid--numvar) 
-    - [NumNorm(); normalize a number 0..1 min..max](#numnorm-normalize-a-number-01-minmax) 
-    - [NumScore(); report name and mid](#numscore-report-name-and-mid) 
-    - [NumDist()](#numdist-distance-between-2-numbers) : distance between 2 numbers
+    - [NumNorm()](#numnorm--normalize-a-number-01-minmax) : normalize a number 0..1 min..max
+    - [NumScore()](#numscore--report-name-and-mid) : report name and mid
+    - [NumDist()](#numdist--distance-between-2-numbers) : distance between 2 numbers
 
 ```awk
 @include "gold"
@@ -108,7 +108,7 @@ function NumDec(i,x,     d) {
 function NumMid(i) { return i.mu }
 function NumVar(i) { return i.sd }
 ```
-###  NumNorm(); normalize a number 0..1 min..max
+###  NumNorm() : normalize a number 0..1 min..max
 
 ```awk
 function NumNorm(i,x) {
@@ -116,14 +116,19 @@ function NumNorm(i,x) {
   return (x - i.lo)/(i.hi - i.lo + 10^-32)
 }
 ```
-###  NumScore(); report name and mid
+###  NumScore() : report name and mid
 
 ```awk
 function NumScore(i) {
   return i.txt "=" NumMid(i)
 }
 ```
-### NumDist(): distance between 2 numbers
+### NumDist() : distance between 2 numbers
+
+This algorithm comes from David Aha's Instance-based Reasoning paper, AIJ, 1991.
+When values are unknown, assume the worst and maximize the distance between them.
+
+Returns 0..1
 
 ```awk
 function NumDist(i,x,y) {
