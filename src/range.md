@@ -28,7 +28,7 @@
 Bottom up discretizer.
 In the following code, `Range` is about one range and `Ranges` is a manager of a list of ranges.
 
-- [Range(i, want:str, min:num, last:num?)](#rangei-wantstr-minnum-lastnum--constructor-for-one-range) : constructor for one range
+- [Range(i:Range, "want", $min, $last?)](#rangeirange-want-min-last--constructor-for-one-range) : constructor for one range
     - [Update](#update) 
         - [RangeFile()](#rangefile--and-a-pair-of-number-and-symbol-to-a-range) : and a pair of number and symbol to a range
     - [Merging](#merging) 
@@ -81,7 +81,7 @@ In this case, `MayMerge` scored each bin on how well they predicted for what we 
         |  rest:   0
         |  want:   b
 
-## Range(i, want:str, min:num, last:num?) : constructor for one range
+## Range(i:Range, "want", $min, $last?) : constructor for one range
 
 ```awk
 @include "gold"
