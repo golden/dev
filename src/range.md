@@ -1,6 +1,9 @@
 
 # Range
 
+Bottom up discretizer.
+In the following code, `Range` is about one range and `Ranges` is a manager of a list of ranges.
+
 - [Range()](#range--constructor-for-one-range) : constructor for one range
     - [Update](#update) 
         - [RangeFile()](#rangefile--and-a-pair-of-number-and-symbol-to-a-range) : and a pair of number and symbol to a range
@@ -12,7 +15,7 @@
         - [RangesMerged()](#rangesmerged--repeatedly-merge-a-list-of-ranges-until-there-is-nothing-left-to-merge) : repeatedly merge a list of ranges (until there is nothing left to merge.
         - [RangesMerge()](#rangesmerge--try-to-merge-two-ranges-then-move-on-down-the-lst) : try to merge two ranges, then move on down the lst
 
-Bottom up discretizer.
+This code works like this:
 
 - Inputs a list of items, each of which `z` has fields `z.x` and `z.y`. 
 - Divides the list into  16 bins (and if those bins are too small, then  it trues 8, then 4, then 2).
@@ -50,7 +53,6 @@ In this case, `MayMerge` scored each bin on how well they predicted for what we 
         |  rest: 0
         |  want: b
 
-In the following code, `Range` is about one range and `Ranges` is a manager of a list of ranges.
 
 ## Range() : constructor for one range
 
