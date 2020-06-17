@@ -100,8 +100,6 @@ function Range(i, want, min,last) {
 ### Update
 
 #### RangeFile() : and a pair of number and symbol to a range
-##### never know
-##### and here and ther
 
 ```awk
 function RangeFill(i,x,y) {
