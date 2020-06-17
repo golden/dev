@@ -36,8 +36,8 @@ In the following code, `Range` is about one range and `Ranges` is a manager of a
         - [RangeMerge()](#rangemerge--do-the-merge) : do the merge
 - [Ranges()](#ranges--constructor-for-manager-of-a-list-of-ranges) : constructor for manager of a list of ranges
     - [Manage the Merging](#manage-the-merging) 
-        - [RangesMerged()](#rangesmerged--repeatedly-merge-a-list-of-ranges-until-there-is-nothing-left-to-merge) : repeatedly merge a list of ranges (until there is nothing left to merge.
-        - [RangesMerge()](#rangesmerge--try-to-merge-two-ranges-then-move-on-down-the-lst) : try to merge two ranges, then move on down the lst
+        - [RangesMerged()](#rangesmerged--repeatedly-merge-a-list-of-ranges-until-there-is-nothing-left-to-merge) : repeatedly merge a list of ranges until there is nothing left to merge.
+        - [RangesMerge()](#rangesmerge--try-to-merge-two-ranges-then-move-on-down-the-list) : try to merge two ranges, then move on down the list
 
 This code works like this:
 
@@ -49,8 +49,8 @@ This code works like this:
 For example, where's 16 bins of 215 numbers ranging from one to six merged into three 
 `Range`s: 
 
-- Bins  1  ,2,  3,  4,  5,  6,  7 were merged;
-- Bins  8,  9, 10, 11, 12, 13, 14, 15 were merged;
+- Bins  1, 2,  3,  4,  5,  6,  7 were merged;
+- Bins  8, 9, 10, 11, 12, 13, 14, 15 were merged;
 - Bins 16, 17. 18, 19, 20 were merged
 
 In this case, `MayMerge` scored each bin on how well they predicted for what we `want` (i.e. class `b`):
@@ -112,19 +112,20 @@ function RangeFill(i,x,y) {
 #### RangeMayMerge() : can we combine two ranges
 
 ```awk
-function RangeMayMerge(i,j, 
-                       bi,bj,b,ri,rj,r, si,sj,s) {
+function RangeMayMerge(i,j,best, rest, 
+                       bi,bj,b,ri,rj,r, si,sj,s,z) {
   #-- bests
   bi =  i.best; bj  = j.best; b  = bi+bj; 
-  bi /= i.n;    bj /= j.n;    b /= (i.n+j.n)
+  bi /= best;   bj /= best;   b /= best;
   #-- rests
   ri =  i.rest; rj  = j.rest; r  = ri+rj; 
-  ri /= i.n;    rj /= j.n;    r /= (i.n+j.n)
+  ri /= rest;   rj /= rest;   r /= rest
   #-- scores
   si = bi^2   / (bi + ri)
   sj = bj^2  /  (bj + rj)
   s  = b ^2 /   (b  + r)
-  return (s >= si*1.05 || s >= sj*1.05) 
+  z= (s >= si && s >= sj) 
+  return z
 }
 ```
 #### RangeMerge() : do the merge
@@ -139,45 +140,63 @@ function RangeMerge(i,j) {
 ```
 ## Ranges() : constructor for manager of a list of ranges
 
+- Divides the list into  16 bins (and if those bins are too 
+  small, then  it trues 8, then 4, then 2).
+- Then sort the divisions.
+- Then make one `Range` per bin.
+- Then trying merging the ranges.
+
 ```awk
-function Ranges(a,ok,b,  min,j,r) {
+function Ranges(a,ok,ranges,  min,j,r,best,rest) {
+  #--- divide up the numbers
   for (j=16; j>=2; j /=2) 
-    if ((min = ns int(length(a)/j)) >= 4) 
+    if ((min = int(length(a)/j)) >= 4) 
       break 
   if (min<4) min = 4
-  has3(b, ++r ,"Range", ok,min)
+  #--- sort the divisions
   keysort(a,"x")
-  for(j=1; j <= length(a); j++)  
-    if ( RangeFill( b[r], a[j].x, a[j].y) )
+  #--- make one Range per bin
+  has3(ranges, ++r ,"Range", ok,min)
+  for(j=1; j <= length(a); j++)   {
+    best += a[j].y == ok
+    rest += a[j].y != ok
+    if ( RangeFill( ranges[r], a[j].x, a[j].y) )
       if (j < length(a) - min)
         if(a[j].x != a[j+1].x) 
-          has3( b, ++r, "Range", ok, min,r-1);
-  while (RangesMerged(b));
+          has3( ranges, ++r, "Range", ok, min,r-1)
+  }
+  #--- Trying merging what you can.
+  while (RangesMerged(ranges, 
+                      best+0.0001, 
+                      rest+0.0001));
 }
 ```
 ### Manage the Merging
 
-#### RangesMerged() : repeatedly merge a list of ranges (until there is nothing left to merge.
+#### RangesMerged() : repeatedly merge a list of ranges until there is nothing left to merge.
 
 ```awk
-function RangesMerged(a,   b4) {
+function RangesMerged(a,best,rest,   b4) {
   b4 = length(a)
-  RangesMerge(a, length(a), 0)
+  RangesMerge(a, length(a), 0, best,rest)
   return b4 > length(a)
 }
 ```
-#### RangesMerge() : try to merge two ranges, then move on down the lst
+#### RangesMerge() : try to merge two ranges, then move on down the list
+
+Working left from the back of the list, try to merge adjacent items. If so,
+delete one. Then,  after looking at two items, move left.
 
 ```awk
-function RangesMerge(a,y,z,    x,m) {
+function RangesMerge(a,y,z,best,rest,    x,m) {
   if (y in a) { 
     x = a[y].last
-    if (x && RangeMayMerge( a[x], a[y] )) {
+    if (x && RangeMayMerge( a[x], a[y],best,rest)) {
         RangeMerge( a[x], a[y] )
         if(z) a[z].last = x
         delete a[y];
-        RangesMerge(a,x,z)  
+        RangesMerge(a,x,z, best,rest)  
     } else
-        RangesMerge(a,x,y) }
+        RangesMerge(a,x,y, best,rest) }
 }
 ```
