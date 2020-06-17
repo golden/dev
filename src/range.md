@@ -49,33 +49,36 @@ This code works like this:
 For example, where's 16 bins of 215 numbers ranging from one to six merged into three 
 `Range`s: 
 
-- Bins  1, 2,  3,  4,  5,  6,  7 were merged;
-- Bins  8, 9, 10, 11, 12, 13, 14, 15 were merged;
-- Bins 16, 17. 18, 19, 20 were merged
+- Bins  1, 2,  3 were merged;
+- Bins  4, 5, 6, through 14 were merged;
+- Bins 16, 17, 18, 19, 20 were merged
 
 In this case, `MayMerge` scored each bin on how well they predicted for what we `want` (i.e. class `b`):
 
         1
-        |  lo:   1.01757
-        |  hi:   2.96538
-        |  n:    91
-        |  best: 28
-        |  rest: 63
-        |  want: b
-        8
-        |  lo:   2.96838
-        |  hi:   5.37041
-        |  n:    104
-        |  best: 57
-        |  rest: 47
-        |  want: b
-        16
-        |  lo:   5.38099
-        |  hi:   5.97559
-        |  n:    20
-        |  best: 20
-        |  rest: 0
-        |  want: b
+        |  lo:    1.01757
+        |  hi:    1.7581
+        |  min:   13
+        |  n:     39
+        |  best:   6
+        |  rest:  33
+        |  want:   b
+        4
+        |  lo:     1.77888
+        |  hi:     5.03532
+        |  min:   13
+        |  n:    143
+        |  best:  66
+        |  rest:  77
+        |  want:   b
+        15
+        |  lo:     5.04087
+        |  hi:     5.97559
+        |  min:   13
+        |  n:     33
+        |  best:  33
+        |  rest:   0
+        |  want:   b
 
 ## Range() : constructor for one range
 
