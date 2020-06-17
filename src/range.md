@@ -28,7 +28,7 @@
 Bottom up discretizer.
 In the following code, `Range` is about one range and `Ranges` is a manager of a list of ranges.
 
-- [Range()](#range--constructor-for-one-range) : constructor for one range
+- [Range(i:s, j:n, [a:s]\*)](#rangeis-jn-as--constructor-for-one-range) : constructor for one range
     - [Update](#update) 
         - [RangeFile()](#rangefile--and-a-pair-of-number-and-symbol-to-a-range) : and a pair of number and symbol to a range
     - [Merging](#merging) 
@@ -38,6 +38,7 @@ In the following code, `Range` is about one range and `Ranges` is a manager of a
     - [Manage the Merging](#manage-the-merging) 
         - [RangesMerged()](#rangesmerged--repeatedly-merge-a-list-of-ranges-until-there-is-nothing-left-to-merge) : repeatedly merge a list of ranges until there is nothing left to merge.
         - [RangesMerge()](#rangesmerge--try-to-merge-two-ranges-then-move-on-down-the-list) : try to merge two ranges, then move on down the list
+
 
 This code works like this:
 
@@ -80,7 +81,7 @@ In this case, `MayMerge` scored each bin on how well they predicted for what we 
         |  rest:   0
         |  want:   b
 
-## Range(i:s, j:n, [a:s]) : constructor for one range
+## Range(i:s, j:n, [a:s]\*) : constructor for one range
 
 ```awk
 @include "gold"
