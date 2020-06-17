@@ -80,7 +80,7 @@ In this case, `MayMerge` scored each bin on how well they predicted for what we 
         |  rest:   0
         |  want:   b
 
-## Range() : constructor for one range
+## Range(i:s, j:n, [a:s]) : constructor for one range
 
 ```awk
 @include "gold"
