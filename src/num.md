@@ -140,4 +140,3 @@ function NumDist(i,x,y) {
   return abs(x - y) 
 }
 ```
-
