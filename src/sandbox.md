@@ -43,11 +43,10 @@ function worker(s,   n,j,xy,a,k,rs,x) {
   n = split(s,a,",")
   for(j=1;j<n;j+=2) 
    if ( a[j] != "x" ) {
-      x= a[j] + rand()
-      xy[++k].x = x
+      xy[++k].x = a[j] + rand()
       xy[  k].y = a[j+1]
-      print(x,a[j+1])
   }
+  print(length(xy))
   Ranges(xy, "b", rs)
   oo(rs)
 }
@@ -110,16 +109,15 @@ function RangesMerged(a,   b4) {
   return b4 > length(a)
 }
 
-function RangesMerge(a,y,z,    x) {
-  if (y<2) return
-  x = a[y].last
-  if (x && RangeMayMerge( a[x], a[y] )) {
-     RangeMerge( a[x], a[y] )
-     if(z) a[z].last = x
-     print(y)
-     delete a[y];
-     RangesMerge(a,x,z)  
-  } else
-     RangesMerge(a,x,y) 
+function RangesMerge(a,y,z,    x,m) {
+  if (y in a) { 
+    x = a[y].last
+    if (x && RangeMayMerge( a[x], a[y] )) {
+        RangeMerge( a[x], a[y] )
+        if(z) a[z].last = x
+        delete a[y];
+        RangesMerge(a,x,z)  
+    } else
+        RangesMerge(a,x,y) }
 }
 ```
