@@ -27,7 +27,7 @@
 @include "gold"
 @include "range"
 
-BEGIN { tests("rangeok","_range1,_range2,_range3,_range4") }
+BEGIN { tests("rangeok","_range1,_range2,_range3,_range4,_range5") }
 
 function _range1(f) {
   _range1a("1,a,1,a,1,b,1,a,1,a,1,b,1,a,1,a,1,a,1,a,1,a,2,a,2,a,"\
@@ -56,6 +56,12 @@ function _range4(f) {
            "37,b,38,b,40,b,41,b,42,b,43,b,"\
            "44,b,45,b,46,b,47,b,50,b,51,b,52,b,"\
            "53,b,54,b,55,b,56,b")
+}
+function _range5(f) {
+  _range2a("10,a,11,a,12,a,13,a,14,a,15,a,16,a,17,a,18,a,19,a,20,a,21,a,20,a,"\
+           "23,a,24,a,25,a,26,a,27,a,28,a,30,a,31,a,32,a,33,b,34,b,35,b,36,b,"\
+           "37,b,38,b,40,b,41,b,42,b,43,b,44,b,45,a,46,a,47,a,50,a,51,a,52,a,"\
+           "53,a,54,a,55,a,56,a")
 }
 
 function _range1a(s,   n,j,xy,a,k,rs,x) {

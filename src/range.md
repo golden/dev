@@ -28,7 +28,7 @@
 Bottom up discretizer.
 In the following code, `Range` is about one range and `Ranges` is a manager of a list of ranges.
 
-- [Range(i:Range, "want", $min, $last?)](#rangeirange-want-min-last--constructor-for-one-range) : constructor for one range
+- [Range(i:Range, "want", $min, $left?)](#rangeirange-want-min-left--constructor-for-one-range) : constructor for one range
     - [Update](#update) 
         - [RangeFile()](#rangefile--and-a-pair-of-number-and-symbol-to-a-range) : and a pair of number and symbol to a range
     - [Merging](#merging) 
@@ -81,15 +81,18 @@ In this case, `MayMerge` scored each bin on how well they predicted for what we 
         |  rest:   0
         |  want:   b
 
-## Range(i:Range, "want", $min, $last?) : constructor for one range
+## Range(i:Range, "want", $min, $left?) : constructor for one range
 
 ```awk
 @include "gold"
+@include "poly"
 
-function Range(i, want, min,last) {
+function Range(i, want, min,left) {
+  Object(i)
+  is(i, "Range")
   i.lo   =  10^64
   i.hi   = -10^64
-  i.last = last
+  i.left = left
   i.want = want
   i.best = 0
   i.rest = 0.00001
@@ -99,10 +102,13 @@ function Range(i, want, min,last) {
 ```
 ### Update
 
-#### RangeFile() : and a pair of number and symbol to a range
+#### RangeFilled() : add a pair of number and symbol to a range
+
+Return true if there is enough in this range to
+justify starting a new range.
 
 ```awk
-function RangeFill(i,x,y) {
+function RangeFilled(i,x,y) {
   x += 0
   if (x < i.lo) i.lo = x
   if (x > i.hi) i.hi = x
@@ -151,7 +157,8 @@ function RangeMerge(i,j) {
 - Then trying merging the ranges.
 
 ```awk
-function Ranges(a,ok,ranges,  min,j,r,best,rest) {
+function Ranges(a,ok,ranges,klass,  min,j,r,best,rest) {
+  klass = klass ? klass : "Range"
   #--- divide up the numbers
   for (j=16; j>=2; j /=2) 
     if ((min = int(length(a)/j)) >= 4) 
@@ -160,14 +167,14 @@ function Ranges(a,ok,ranges,  min,j,r,best,rest) {
   #--- sort the divisions
   keysort(a,"x")
   #--- make one Range per bin
-  has3(ranges, ++r ,"Range", ok,min)
+  has3(ranges, ++r ,klass, ok,min)
   for(j=1; j <= length(a); j++)   {
     best += a[j].y == ok
     rest += a[j].y != ok
-    if ( RangeFill( ranges[r], a[j].x, a[j].y) )
+    if ( filled( ranges[r], a[j].x, a[j].y) )
       if (j < length(a) - min)
         if(a[j].x != a[j+1].x) 
-          has3( ranges, ++r, "Range", ok, min,r-1)
+          has3( ranges, ++r, klass, ok, min,r-1)
   }
   #--- Trying merging what you can.
   while (RangesMerged(ranges, 
@@ -192,15 +199,16 @@ Working left from the back of the list, try to merge adjacent items. If so,
 delete one. Then,  after looking at two items, move left.
 
 ```awk
-function RangesMerge(a,y,z,best,rest,    x,m) {
-  if (y in a) { 
-    x = a[y].last
-    if (x && RangeMayMerge( a[x], a[y],best,rest)) {
-        RangeMerge( a[x], a[y] )
-        if(z) a[z].last = x
-        delete a[y];
-        RangesMerge(a,x,z, best,rest)  
-    } else
-        RangesMerge(a,x,y, best,rest) }
+function RangesMerge(a,two,three,best,rest,    one,m) {
+  if (two in a) { 
+    one = a[two].left
+    if (one && mayMerge( a[one], a[two],best,rest)) {
+        merge( a[one], a[two] )
+        if(three) 
+          a[three].left = one
+        delete a[two];
+        two = three
+    } 
+    RangesMerge(a,one,two, best,rest)  }
 }
 ```
