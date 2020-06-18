@@ -26,8 +26,10 @@
 ```awk
 @include "gold"
 @include "range"
+@include "tab"
 
 BEGIN { tests("rangeok","_range1,_range2,_range3,_range4,_range5") }
+#BEGIN { tests("rangeok","_exit") }
 
 function _range1(f) {
   _range1a("1,a,1,a,1,b,1,a,1,a,1,b,1,a,1,a,1,a,1,a,1,a,2,a,2,a,"\
@@ -89,4 +91,7 @@ function _range2a(s,   n,j,xy,a,k,rs,x,y) {
   print "\n========================="
   oo(rs)
 }
-```
+function _exit(f,  i) {
+  Tab(i)
+  TabRead(i,"data/raw/auto93" GOLD.dot "csv") 
+}

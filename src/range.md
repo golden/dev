@@ -29,15 +29,13 @@ Bottom up discretizer.
 In the following code, `Range` is about one range and `Ranges` is a manager of a list of ranges.
 
 - [Range(i:Range, "want", $min, $left?)](#rangeirange-want-min-left--constructor-for-one-range) : constructor for one range
-    - [Update](#update) 
-        - [RangeFile()](#rangefile--and-a-pair-of-number-and-symbol-to-a-range) : and a pair of number and symbol to a range
-    - [Merging](#merging) 
+    - [Update](#update) : 
+        - [RangeFilled()](#rangefilled--add-a-pair-of-number-and-symbol-to-a-range) : add a pair of number and symbol to a range
+    - [Merging](#merging) : 
         - [RangeMayMerge()](#rangemaymerge--can-we-combine-two-ranges) : can we combine two ranges
         - [RangeMerge()](#rangemerge--do-the-merge) : do the merge
 - [Ranges()](#ranges--constructor-for-manager-of-a-list-of-ranges) : constructor for manager of a list of ranges
-    - [Manage the Merging](#manage-the-merging) 
-        - [RangesMerged()](#rangesmerged--repeatedly-merge-a-list-of-ranges-until-there-is-nothing-left-to-merge) : repeatedly merge a list of ranges until there is nothing left to merge.
-        - [RangesMerge()](#rangesmerge--try-to-merge-two-ranges-then-move-on-down-the-list) : try to merge two ranges, then move on down the list
+    - [RangesMerge()](#rangesmerge--try-to-merge-two-ranges-then-move-on-down-the-list) : try to merge two ranges, then move on down the list
 
 
 This code works like this:
@@ -158,7 +156,8 @@ function RangeScore(i,    z,b,r) {
 - Then trying merging the ranges.
 
 ```awk
-function Ranges(a,ok,ranges,klass,  min,j,r,best,rest) {
+function Ranges(a,ok,ranges,klass,  
+                min,j,r,best,rest,b4, now) {
   klass = klass ? klass : "Range"
   #--- divide up the numbers
   for (j=16; j>=2; j /=2) 
@@ -182,45 +181,53 @@ function Ranges(a,ok,ranges,klass,  min,j,r,best,rest) {
     ranges[r].rests = rest + 0.0001
   }
   #--- Trying merging what you can.
-  while (RangesMerged(ranges));
+  b4 = length(ranges)
+  while (b4> now) {
+    b4  = length(ranges)
+    now = RangesMerge(ranges, b4)
+  }
   keysort(ranges, "score")
 }
 ```
-### Manage the Merging
+### RangesMerge() : try to merge two ranges, then move on down the list
 
-#### RangesMerged() : repeatedly merge a list of ranges until there is nothing left to merge.
+This code starts at the end the list, 
+then loop to the left.
+In the following:
 
-```awk
-function RangesMerged(a,   b4) {
-  b4 = length(a)
-  RangesMerge(a, length(a))
-  return b4 > length(a)
-}
-```
-#### RangesMerge() : try to merge two ranges, then move on down the list
+- `a` are the ranges 
+- `one,two,three` are integers that index into `a`. 
+- So (e.g.) `one` is _not_ a range;
+  - But `a[one]` is.each step of the loop:
 
-This code starts at the end the list, then loop to the left.  At
-each step of the loop:
+The invariants here are:
 
-- We look at  three consecutive ranges _one.two,three_;
-- We check to  see if we can merge _two_ into _one_. 
+- We look at  three consecutive ranges `one.two,three`;
+- We check to  see if we can merge `two` into `one`. 
   If so, then:
-  -  _three.left_ should point to _one_
-  - And we should delete _two_.
-- Note one special cases: at 
-  the start of the loop, _two_ is the current item and _three_ is nil.
-  
+  -  `three.left` should point to `one`
+  - And we should delete `two`.
+- Note two special cases: 
+  - At the start of the loop, `two` is the current item and `three` is nil.
+  - At the end of the loop, `two` falls
+    off the left-hand-side of the list
+    (which is the termiantion condition).
+ 
 ```awk
 function RangesMerge(a,two,three,    one,m) {
   if (two in a)  {
-      one = a[two].left
-      if (one && mayMerge( a[one], a[two])) {
-          merge( a[one], a[two] )
-          if(three) 
-            a[three].left = one
-          delete a[two];
-          RangesMerge(a, one, three)  
-      } else
-          RangesMerge(a, one, two)  }
+    one = a[two].left
+    RangeScore( a[two] )
+    if (one && mayMerge( a[one], a[two])) {
+       merge( a[one], a[two] )
+       if(three) 
+         a[three].left = one
+       delete a[two];
+       two = three
+    } 
+    RangesMerge(a, one, two)  
+  }
+  return length(a)
 }
 ```
+
