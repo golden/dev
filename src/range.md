@@ -34,7 +34,8 @@ In the following code, `Range` is about one range and `Ranges` is a manager of a
     - [Merging](#merging) : 
         - [RangeMayMerge()](#rangemaymerge--can-we-combine-two-ranges) : can we combine two ranges
         - [RangeMerge()](#rangemerge--do-the-merge) : do the merge
-- [Ranges()](#ranges--constructor-for-manager-of-a-list-of-ranges) : constructor for manager of a list of ranges
+- [Manage a list of `Range`s](#manage-a-list-of-ranges) : 
+    - [Ranges()](#ranges--constructor-for-manager-of-a-list-of-ranges) : constructor for manager of a list of ranges
     - [RangesMerge()](#rangesmerge--try-to-merge-two-ranges-then-move-on-down-the-list) : try to merge two ranges, then move on down the list
 
 
@@ -147,7 +148,9 @@ function RangeScore(i,    z,b,r) {
   return z
 }
 ```
-## Ranges() : constructor for manager of a list of ranges
+## Manage a list of `Range`s
+
+### Ranges() : constructor for manager of a list of ranges
 
 - Divides the list into  16 bins (and if those bins are too 
   small, then  it trues 8, then 4, then 2).
