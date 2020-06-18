@@ -35,6 +35,6 @@ function _csv(f, it,n) {
     n += length(it.cells) 
   ok(f, n == 60)
   ok(f, typeof(it.cells[1])=="string")
-  ok(f, typeof(it.cells[2])=="strnum")
+  ok(f, typeof(it.cells[2])=="number")
 }
 ```

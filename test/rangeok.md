@@ -37,11 +37,10 @@ function _range1(f) {
 }
 
 function _range2(f) {
-  _range2a("10,a,11,a,12,a,13,b,14,b,15,b,16,b,17,b,18,b,19,b,20,b,21,b,20,a,"\
-           "23,a,24,a,25,a,26,a,27,a,28,a,30,a,31,a,32,a,33,a,34,a,35,a,36,a,"\
-           "37,a,38,a,40,b,41,b,42,b,43,b,"\
-           "44,b,45,b,46,b,47,b,50,b,51,b,52,b,"\
-           "53,b,54,b,55,b,56,b")
+  _range2a("10,a,11,a,12,a,"\
+           "13,b,14,b,15,b,16,b,17,b,18,b,19,b,20,b,21,b,"\
+           "20,a,23,a,24,a,25,a,26,a,27,a,28,a,30,a,31,a,32,a,33,a,34,a,35,a,36,a,37,a,38,a,"\
+           "40,b,41,b,42,b,43,b,44,b,45,b,46,b,47,b,50,b,51,b,52,b,53,b,54,b,55,b,56,b")
 }
 function _range3(f) {
   _range2a("10,a,11,a,12,a,13,a,14,a,15,a,16,a,17,a,18,a,19,a,20,a,21,a,20,a,"\
@@ -76,13 +75,15 @@ function _range1a(s,   n,j,xy,a,k,rs,x) {
   print "\n========================="
   oo(rs)
 }
-function _range2a(s,   n,j,xy,a,k,rs,x) {
+function _range2a(s,   n,j,xy,a,k,rs,x,y) {
   s = s #"," s "," s "," s "," s
   n = split(s,a,",")
   for(j=1;j<n;j+=2) 
    if ( a[j] != "x" ) {
-      xy[++k].x = a[j] 
-      xy[  k].y = a[j+1]
+      x = a[j]
+      y = a[j+1]
+      xy[++k].x = x +0
+      xy[  k].y = y
   }
   Ranges(xy, "b", rs)
   print "\n========================="

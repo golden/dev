@@ -108,13 +108,14 @@ Return true if there is enough in this range to
 justify starting a new range.
 
 ```awk
-function RangeFilled(i,x,y) {
-  x += 0
+function RangeFilled(i,x,y,     z) {
+  x = x+0
   if (x < i.lo) i.lo = x
   if (x > i.hi) i.hi = x
-  i.best += y==i.want
-  i.rest += y!=i.want
-  return ++i.n >= i.min
+  i.best += (y == i.want)
+  i.rest += (y != i.want)
+  i.n++
+  return i.n >= i.min
 }
 ```
 ### Merging
@@ -122,20 +123,11 @@ function RangeFilled(i,x,y) {
 #### RangeMayMerge() : can we combine two ranges
 
 ```awk
-function RangeMayMerge(i,j,best, rest, 
-                       bi,bj,b,ri,rj,r, si,sj,s,z) {
-  #-- bests
-  bi =  i.best; bj  = j.best; b  = bi+bj; 
-  bi /= best;   bj /= best;   b /= best;
-  #-- rests
-  ri =  i.rest; rj  = j.rest; r  = ri+rj; 
-  ri /= rest;   rj /= rest;   r /= rest
-  #-- scores
-  si = bi^2   / (bi + ri)
-  sj = bj^2  /  (bj + rj)
-  s  = b ^2 /   (b  + r)
-  z= (s >= si && s >= sj) 
-  return z
+function RangeMayMerge(i,j,      s,b,r) {
+  b = (i.best + j.best) / i.bests
+  r = (i.rest + j.rest) / i.rests
+  s = b^2/(b+r)
+  return (s >= RangeScore(i) && s >= RangeScore(j))
 }
 ```
 #### RangeMerge() : do the merge
@@ -146,6 +138,15 @@ function RangeMerge(i,j) {
   i.best += j.best
   i.rest += j.rest
   i.n    += j.n
+}
+
+function RangeScore(i,    z,b,r) {
+  z = 0.001
+  b = i.best/ (i.bests+z)
+  r = i.rest/ (i.rests+z)
+  z = b^2/(b+r)
+  i.score = z
+  return z
 }
 ```
 ## Ranges() : constructor for manager of a list of ranges
@@ -176,10 +177,13 @@ function Ranges(a,ok,ranges,klass,  min,j,r,best,rest) {
         if(a[j].x != a[j+1].x) 
           has3( ranges, ++r, klass, ok, min,r-1)
   }
+  for(r in ranges) {
+    ranges[r].bests = best + 0.0001
+    ranges[r].rests = rest + 0.0001
+  }
   #--- Trying merging what you can.
-  while (RangesMerged(ranges, 
-                      best+0.0001, 
-                      rest+0.0001));
+  while (RangesMerged(ranges));
+  keysort(ranges, "score")
 }
 ```
 ### Manage the Merging
@@ -187,28 +191,36 @@ function Ranges(a,ok,ranges,klass,  min,j,r,best,rest) {
 #### RangesMerged() : repeatedly merge a list of ranges until there is nothing left to merge.
 
 ```awk
-function RangesMerged(a,best,rest,   b4) {
+function RangesMerged(a,   b4) {
   b4 = length(a)
-  RangesMerge(a, length(a), 0, best,rest)
+  RangesMerge(a, length(a))
   return b4 > length(a)
 }
 ```
 #### RangesMerge() : try to merge two ranges, then move on down the list
 
-Working left from the back of the list, try to merge adjacent items. If so,
-delete one. Then,  after looking at two items, move left.
+This code starts at the end the list, then loop to the left.  At
+each step of the loop:
 
+- We look at  three consecutive ranges _one.two,three_;
+- We check to  see if we can merge _two_ into _one_. 
+  If so, then:
+  -  _three.left_ should point to _one_
+  - And we should delete _two_.
+- Note one special cases: at 
+  the start of the loop, _two_ is the current item and _three_ is nil.
+  
 ```awk
-function RangesMerge(a,two,three,best,rest,    one,m) {
-  if (two in a) { 
-    one = a[two].left
-    if (one && mayMerge( a[one], a[two],best,rest)) {
-        merge( a[one], a[two] )
-        if(three) 
-          a[three].left = one
-        delete a[two];
-        two = three
-    } 
-    RangesMerge(a,one,two, best,rest)  }
+function RangesMerge(a,two,three,    one,m) {
+  if (two in a)  {
+      one = a[two].left
+      if (one && mayMerge( a[one], a[two])) {
+          merge( a[one], a[two] )
+          if(three) 
+            a[three].left = one
+          delete a[two];
+          RangesMerge(a, one, three)  
+      } else
+          RangesMerge(a, one, two)  }
 }
 ```

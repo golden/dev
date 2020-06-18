@@ -45,6 +45,7 @@ But what about CSV files with:
 
 - comments, that should be stripped away?
 - blank lines, that should be skipped?
+- strings, that need coercion to numbers?
 - spurious white space, that should be deleted?
 - records that break over multiple lines?
 
@@ -67,7 +68,7 @@ argument is optional and, if omitted, this code will read from
 standard input.
 
 ```awk   
-function csv(a,file,     b4, status,line) {
+function csv(a,file,     b4, status,line,i,x) {
   file   = file ? file : "-"           # [1]
   status = getline < file
   if (status<0) {   
@@ -85,6 +86,10 @@ function csv(a,file,     b4, status,line) {
   if (line ~ /,$/) 
     return csv(a,file, line)           # [4]
   split(line, a, ",")                  # [7]
+  for(i in a) {
+    x= a[i]
+    a[i] = x+0==x ? x+0 : x            # [8]
+  }
   return 1
 }
 ```
@@ -98,6 +103,7 @@ Notes:
 5. Kill whitespace and comments
 6. Skip blank lines
 7. Split line on "," into the array "a"
+8. Coerce strings to numbers (if appropriate).
 
 Example usage:
 
@@ -136,11 +142,8 @@ function RowDoing(i,   c,tmp,n,x,y) {
       if (tmp[c] !~ /\?/)
         i.use[c] = ++n;
   i.r++
-  for(c in i.use)  {
-    x = tmp[c]
-    y = x+0
-    i.cells[ i.use[c] ] = x==y ? y : x
-  }
+  for(c in i.use)  
+    i.cells[ i.use[c] ] = tmp[c]
   return 1
 }
 ```
@@ -148,6 +151,6 @@ Note: `i` needs to be initialized before
 each call to `Rows` e.g.
 
      Row(it, "data" GOLD.dot "csv")
-     while( Doing(it) ) {
+     while( doing(it) ) {
        print it.cells[1]
    
