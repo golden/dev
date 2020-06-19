@@ -130,6 +130,15 @@ function TabRead(i,f,    c,it) {
   close(f)
 }
 ```
+##  Cloning
+
+```awk
+function TabClone(i,j,   c,a) {
+  Tab(j)
+  TabCols(j, i.header)
+}
+```
+
 ## Geometry
 
 ### TabDist() : return a distance between rows

@@ -256,6 +256,71 @@ While the prerequisites above must be satisfied prior to having your pull reques
 
 ### Gold Styleguide
 
+Signatures:
+
+Booleans are either 0,1
+
+    bool = 0 | 1
+
+Types are built-in or bool or a user defined class. 
+
+   Type ::= number | string | bool | class
+
+Values are types with an optional default
+
+Your code may not have any classes. 
+But in my code, classes are things with a constructor
+that generates a list with a set of standard fields. e.g.
+
+    function List(i) { split("",i,"") } 
+
+    function Person(i, name, dob) {
+      List(i)
+      i["name"] = name
+      i["dob"]  = dob
+    }
+    function Employee(i, name, dob, title) {
+      List(i)
+      haves(i,"who", "Person", name, dob) # classes can nest
+      i["title"] = title
+    }
+   
+    # "has" = my aggregation trick. includes sublists of class "k" 
+    # at a field named "f", initialized (optionally) with arguments "x,y,z"
+
+    function has(   i,f,k,      s) { s= _(i,f); @k(i[f]      ); return s }
+    function have(  i,f,k,x,    s) { s= _(i,f); @k(i[f],x    ); return s }
+    function haves( i,f,k,x,y,  s) { s= _(i,f); @k(i[f],x,y  ); return s }
+    function havess(i,f,k,x,y,z,s) { s= _(i,f); @k(i[f],x,y,z); return s }
+
+    function _(i,f) { 
+      if (!f) return _(i,length(i)+1) # ensure that the place "f" exists
+      i[f][0]; delete i[f][0]         # i[f] is a list
+      split("", i[f], "")             # i[f] is an empty list
+      return f                        # return where we placed it
+    }
+
+Values are strings or numbers
+
+    Value ::= a | $a           
+
+Args are values of values with a default
+setting (used if a not passed in)
+
+   Arg ::= Value | Value=default    
+
+Lists are combinations of types
+
+List ::= [Type]
+
+Lists that are passed in empty (which we will fill)
+
+-
+$a denotes number
+a="default" denotes a string setting that is used if a is not passed in
+a=number denotes a number setting that is used if a is not passed in
+
+$=number denotes
 no shbangs
 
 sets:  dont do intp[[x] = x ~/[0-9]+/ but rather    

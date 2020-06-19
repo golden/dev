@@ -119,10 +119,10 @@ function RangeFilled(i,x,y,     z) {
 ```
 ### Merging
 
-#### RangeMayMerge() : can we combine two ranges
+#### RangeMaybe() : can we combine two ranges
 
 ```awk
-function RangeMayMerge(i,j,      s,b,r) {
+function RangeMaybe(i,j,      s,b,r) {
   b = (i.best + j.best) / i.bests
   r = (i.rest + j.rest) / i.rests
   s = b^2/(b+r)
@@ -160,9 +160,9 @@ function RangeScore(i,    z,b,r) {
 
 ```awk
 function Ranges(a,ok,ranges,klass,  
-                min,j,r,best,rest,b4, now) {
+                min,j,r,best,rest,now) {
   klass = klass ? klass : "Range"
-  #--- divide up the numbers
+  #--- decide how to divide up the numbers
   for (j=16; j>=2; j /=2) 
     if ((min = int(length(a)/j)) >= 4) 
       break 
@@ -184,10 +184,9 @@ function Ranges(a,ok,ranges,klass,
     ranges[r].rests = rest + 0.0001
   }
   #--- Trying merging what you can.
-  b4 = length(ranges)
-  while (b4> now) {
-    b4  = length(ranges)
-    now = RangesMerge(ranges, b4)
+  while (r> now) {
+    r  = length(ranges)
+    now = RangesMerge(ranges, r)
   }
   keysort(ranges, "score")
 }
@@ -203,7 +202,7 @@ In the following:
 - So (e.g.) `one` is _not_ a range;
   - But `a[one]` is.each step of the loop:
 
-The invariants here are:
+The invariant here are:
 
 - We look at  three consecutive ranges `one.two,three`;
 - We check to  see if we can merge `two` into `one`. 
@@ -221,7 +220,7 @@ function RangesMerge(a,two,three,    one,m) {
   if (two in a)  {
     one = a[two].left
     RangeScore( a[two] )
-    if (one && mayMerge( a[one], a[two])) {
+    if (one && maybe( a[one], a[two])) {
        merge( a[one], a[two] )
        if(three) 
          a[three].left = one
@@ -233,4 +232,18 @@ function RangesMerge(a,two,three,    one,m) {
   return length(a)
 }
 ```
+### Ranges4Col(): low-level utility to extract cols
 
+```awk
+function Ranges4Col(t,b,x,y,out,     a,x1,r,ranges) {
+  List(a)
+  for(r in t.rows) {
+    x1 = t.rows[r][x]
+    if (x1 != "?") {
+       a[r].x = x1
+       a[r].y = t.rows[r][y] }}
+  Ranges(a,b,ranges)
+  ranges[length(ranges)].col = x
+  endAdd(ranges, out)
+}
+```
