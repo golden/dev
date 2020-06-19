@@ -52,7 +52,7 @@ function abs(x)  { return x>=0 ? x : -1*x }
 
 ```awk
 function push(a,x) { return a[ length(a)+1 ] = x; }
-function endAdd(a,b,  i) {
+function end2end(a,b,  i) {
   i = length(b) + 1
   b[i][0]
   delete b[i][0]

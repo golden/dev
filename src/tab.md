@@ -111,6 +111,12 @@ function TabCols(i,a,      x,c,xy,what) {
     # make the new column (of type "what")
     has2(i.cols,c,what,x,c)
 }}
+
+function TabRow(i,a,     c,r) {
+  r = length(i.rows) + 1
+  for(c in a)
+    i.rows[r][c] = add(i.cols[c], a[c])
+}
 ```
 ### TabRead() : read a new table from disc
 
@@ -121,12 +127,11 @@ then this code reads from standard input.
 ```awk
 function TabRead(i,f,    c,it) {
   Row(it,f)
-  while (doing(it)) {
+  while (doing(it)) 
     if (it.r == 0) 
       TabCols(i,it.cells)
     else 
-      for(c in it.cells)
-        i.rows[it.r][c] = add(i.cols[c], it.cells[c]) }
+      TabRow(i, it.cells); 
   close(f)
 }
 ```

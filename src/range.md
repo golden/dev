@@ -117,7 +117,14 @@ function RangeFilled(i,x,y,     z) {
   return i.n >= i.min
 }
 ```
-### Merging
+### Querying
+
+```awk
+function RangeCovers(i,row,     x) {
+  x = row[i.col]
+  return x >= i.lo && x <= i.hi
+}
+```
 
 #### RangeMaybe() : can we combine two ranges
 
@@ -159,14 +166,18 @@ function RangeScore(i,    z,b,r) {
 - Then trying merging the ranges.
 
 ```awk
+function RangesSize(a, j) {
+  for (j=16; j>=2; j /=2) 
+    if ((min = int(length(a)/j)) >= 4) 
+      return min
+  return min<4 ? 4 : min
+
+}
 function Ranges(a,ok,ranges,klass,  
                 min,j,r,best,rest,now) {
   klass = klass ? klass : "Range"
   #--- decide how to divide up the numbers
-  for (j=16; j>=2; j /=2) 
-    if ((min = int(length(a)/j)) >= 4) 
-      break 
-  if (min<4) min = 4
+  min = RangesSize(a)
   #--- sort the divisions
   keysort(a,"x")
   #--- make one Range per bin

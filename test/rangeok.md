@@ -91,14 +91,19 @@ function _range2a(s,   n,j,xy,a,k,rs,x,y) {
   print "\n========================="
   oo(rs)
 }
-function _exit(f,  i,c,a,j) {
+function _exit() {
+  tree("data/cooked/auto93bore" GOLD.dot "csv") 
+}
+function tree(f,  i,c,a,j) {
   Tab(i)
-  TabRead(i,"data/cooked/auto93bore" GOLD.dot "csv") 
-  print ">> ",length(i.rows)
-  List(a)
-  for(c in i.the.nums)
-    if (c in i.the.x) 
-      Ranges4Col(i, "true",c, i.the.klass, a);
-  keysort(a,"score")
-  oo(a)
+  TabRead(i,f)
+  tree1(i)
+}
+function tree1(i, col, ranges) {
+  List(ranges)
+  for(col in i.the.nums)
+    if (col in i.the.x) 
+      Ranges4Col(i, "true",col, i.the.klass, ranges);
+  keysort(ranges, "score")
+  oo(ranges)
 }
